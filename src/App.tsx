@@ -26,10 +26,12 @@ import {
 } from './utils/calculations';
 import { exportWorkbookToExcel } from './utils/excelExport';
 import { calculateAssetAvailableQuantity } from './utils/calculations';
-import { useCloudState, saveWorkbookBatch } from './lib/useCloudWorkbook';
+import { useCloudState, saveWorkbookBatch, useSyncStatus } from './lib/useCloudWorkbook';
 
 // Components
 import { WorkbookHeader } from './components/WorkbookHeader';
+import { auth } from './lib/firebase';
+import { signOut } from 'firebase/auth';
 import { FormulaBar } from './components/FormulaBar';
 import { SheetTabs } from './components/SheetTabs';
 
@@ -58,6 +60,7 @@ export const App: React.FC = () => {
   const [activeSheet, setActiveSheet] = useState<ActiveSheet>('DASHBOARD');
 
   // Core Financial State
+  const { status: syncStatus, lastSync } = useSyncStatus();
   const [assets, setAssets] = useCloudState<AssetRecord[]>('assets', INITIAL_ASSETS);
   const [transactions, setTransactions] = useCloudState<TransactionHistoryRecord[]>('transactions', INITIAL_TRANSACTIONS);
     const [lockers, setLockers] = useCloudState<LockerDef[]>('lockers', INITIAL_LOCKERS);
@@ -237,6 +240,28 @@ export const App: React.FC = () => {
 
   return (
     <div id="gold-tracker-app" className="flex flex-col h-screen w-full bg-slate-950 text-slate-100 font-sans antialiased select-none overflow-hidden">
+
+      {syncStatus === 'CONFLICT' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 flex flex-col">
+            <h2 className="text-xl font-bold text-slate-900 mb-2">⚠️ Sync Conflict Detected</h2>
+            <p className="text-slate-600 mb-6">
+              This workbook was changed on another device. Your recent local changes could not be safely synchronized. 
+              <br/><br/>
+              To prevent data loss, please reload the application to receive the latest cloud version, and re-enter your changes.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button 
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+              >
+                Reload Cloud Version
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <WorkbookHeader
         totalAssetsCount={assets.length}
         totalPureGoldWeight={assets.reduce((sum, a) => sum + (a.pureGoldWeight ?? 0), 0)}
@@ -250,7 +275,12 @@ export const App: React.FC = () => {
         onResetData={handleResetData}
         onBackup={handleBackup}
         onRestore={handleRestore}
+        syncStatus={syncStatus}
+        lastSync={lastSync}
+        onLogout={() => signOut(auth)}
       />
+      
+      {/* Logout button at top right, since WorkbookHeader has no space, we can add it as absolute or just inside WorkbookHeader, but we will add a floating one for simplicity or we can add it to the header */}
 
       <FormulaBar
         activeCell={selectedCell.coord}

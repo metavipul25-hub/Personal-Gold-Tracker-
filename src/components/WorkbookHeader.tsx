@@ -1,5 +1,6 @@
 import React from 'react';
 import { 
+  LogOut,
   FileSpreadsheet, 
   Download, 
   PlusCircle, 
@@ -39,31 +40,33 @@ export const WorkbookHeader: React.FC<WorkbookHeaderProps> = ({
   onRunAudit,
   onResetData,
   onBackup,
-  onRestore
+  onRestore,
+  syncStatus = 'SYNCED',
+  lastSync = '',
+  onLogout
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <header id="workbook-header-ribbon" className="bg-slate-900 border-b border-slate-800 text-slate-100 px-4 py-2.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-md">
       {/* Left: Branding and Workbook status */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-amber-950/40 border border-amber-400/40">
-          <Vault className="w-5 h-5 text-slate-950" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="font-bold text-base text-slate-100 tracking-tight flex items-center gap-1.5">
-              <span>Gold Tracker System</span>
-              <span className="text-[11px] font-mono bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 px-1.5 py-0.5 rounded font-normal">
-                v2.5.0 (Simplified)
-              </span>
-            </h1>
+              <div className="flex items-center gap-3">
+          <div className="bg-emerald-600/20 p-2 rounded-lg">
+            <Vault className="w-5 h-5 text-emerald-400" />
           </div>
-          <p className="text-xs text-slate-400">
-            Financial Gold Portfolio • Multi-Sheet Architecture
-          </p>
+          <div>
+            <h1 className="font-semibold text-lg leading-tight tracking-tight text-white flex items-center gap-2">
+              Personal Gold Tracker
+              {syncStatus === 'SYNCING' && <span className="flex h-2 w-2 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>}
+              {syncStatus === 'SYNCED' && <span className="h-2 w-2 rounded-full bg-emerald-500" title="Synced to Cloud"></span>}
+              {syncStatus === 'ERROR' && <span className="h-2 w-2 rounded-full bg-red-500" title="Offline or Error"></span>}
+              {syncStatus === 'CONFLICT' && <span className="h-2 w-2 rounded-full bg-amber-500" title="Sync Conflict"></span>}
+            </h1>
+            <div className="text-xs text-slate-400 font-medium tracking-wide">
+              {syncStatus === 'SYNCING' ? 'Saving...' : syncStatus === 'CONFLICT' ? 'Sync Conflict' : syncStatus === 'ERROR' ? 'Offline' : (lastSync ? 'Last synced: ' + new Date(lastSync).toLocaleTimeString() : 'Cloud Secured Vault')}
+            </div>
+          </div>
         </div>
-      </div>
 
       {/* Center: Live Snapshot KPIs */}
       <div className="hidden xl:flex items-center gap-4 bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-1.5 text-xs">
@@ -166,7 +169,17 @@ export const WorkbookHeader: React.FC<WorkbookHeaderProps> = ({
         >
           <RotateCcw className="w-3.5 h-3.5" />
         </button>
+
+        <button
+          onClick={onLogout}
+          className="flex items-center gap-1.5 hover:bg-slate-800 text-slate-300 hover:text-white px-2.5 py-1.5 rounded transition-colors cursor-pointer border border-slate-700 hover:border-slate-600"
+          title="Sign Out"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          <span className="text-xs font-medium">Sign Out</span>
+        </button>
       </div>
     </header>
   );
+
 };
