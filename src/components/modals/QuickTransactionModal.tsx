@@ -51,8 +51,6 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
   const [errorMsg, setErrorMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  if (!isOpen) return null;
-
   const isAcquisition = ACQUISITION_TRANSACTION_TYPES.includes(txType);
   const requiresExistingAsset = EXISTING_ASSET_TRANSACTION_TYPES.includes(txType);
 
@@ -195,6 +193,8 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
     }
   };
 
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm sm:items-center sm:p-0">
