@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { AssetRecord, TransactionHistoryRecord } from '../../types';
+import { reconcileAsset, calculateAssetAvailableQuantity } from '../../utils/calculations';
 import { Grid, RotateCw, Filter, Layers, Users, MapPin, Coins, Calendar, Sparkles, Activity } from 'lucide-react';
 
 interface PivotsSheetProps {
@@ -7,14 +8,7 @@ interface PivotsSheetProps {
   transactions: TransactionHistoryRecord[];
 }
 
-export const PivotsSheet: React.FC<PivotsSheetProps> = ({
-  assets,
-  transactions
-}) => {
-  const [activePivot, setActivePivot] = useState<number>(1);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
-  const pivotDefinitions = [
+const pivotDefinitions = [
     // --- INVENTORY PIVOTS ---
     { id: 1, name: '64. Asset Count', source: 'ASSETS', row: 'status', val: 'count' },
     { id: 2, name: '65. Asset Status', source: 'ASSETS', row: 'status', val: 'availableWeight' },
@@ -45,6 +39,15 @@ export const PivotsSheet: React.FC<PivotsSheetProps> = ({
     { id: 21, name: '63. Location Transfer Pivot', source: 'TRANSACTIONS', row: 'transactionMonth', val: 'transactionWeight', filter: { field: 'type', value: 'LOCATION TRANSFER' } },
   ];
 
+export const PivotsSheet: React.FC<PivotsSheetProps> = ({
+  assets,
+  transactions
+}) => {
+  const [activePivot, setActivePivot] = useState<number>(1);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  
+
   const currentDef = pivotDefinitions.find(p => p.id === activePivot)!;
 
   // Compute Pivot Aggregations
@@ -58,6 +61,9 @@ export const PivotsSheet: React.FC<PivotsSheetProps> = ({
       const colsSet = new Set<string>();
 
       assets.forEach(a => {
+        const recon = reconcileAsset(a.assetId, assets, transactions);
+        if (recon.availableQuantity <= 0) return;
+        
         let rowKey = 'Unknown';
         if (currentDef.row === 'owner') rowKey = a.owner || 'Unknown';
         else if (currentDef.row === 'assetType') rowKey = a.assetType || 'Other';
@@ -66,10 +72,9 @@ export const PivotsSheet: React.FC<PivotsSheetProps> = ({
         let colKey = 'Unknown';
         if (currentDef.col === 'location') colKey = a.location || 'Unknown';
         else if (currentDef.col === 'purity') colKey = a.purity || 'Unknown';
-
         colsSet.add(colKey);
-
-        const val = currentDef.val === 'count' ? 1 : (a.netGoldWeight ?? 0);
+        
+        const val = currentDef.val === 'count' ? 1 : recon.availableFineWeight;
         
         if (!map.has(rowKey)) map.set(rowKey, new Map());
         const rowMap = map.get(rowKey)!;
@@ -83,6 +88,9 @@ export const PivotsSheet: React.FC<PivotsSheetProps> = ({
 
       if (currentDef.source === 'ASSETS') {
         assets.forEach(a => {
+          const recon = reconcileAsset(a.assetId, assets, transactions);
+          if (recon.availableQuantity <= 0) return;
+
           let key = 'Unknown';
           if (currentDef.row === 'status') key = a.status || 'UNKNOWN';
           else if (currentDef.row === 'assetType') key = a.assetType || 'Other';
@@ -90,8 +98,8 @@ export const PivotsSheet: React.FC<PivotsSheetProps> = ({
           else if (currentDef.row === 'purity') key = a.purity || 'Unknown';
           else if (currentDef.row === 'location') key = a.location || 'Unknown';
           else if (currentDef.row === 'owner') key = a.owner || 'Unknown';
-
-          const val = currentDef.val === 'count' ? 1 : (a.netGoldWeight ?? 0);
+          
+          const val = currentDef.val === 'count' ? 1 : recon.availableFineWeight;
           map.set(key, (map.get(key) || 0) + val);
         });
       } else {
