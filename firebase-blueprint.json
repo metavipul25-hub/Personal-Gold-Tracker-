@@ -1,0 +1,89 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "fields": [
+        { "name": "email", "type": "string" },
+        { "name": "createdAt", "type": "timestamp" }
+      ],
+      "rules": [
+        {
+          "allow": "read, write",
+          "condition": "request.auth != null && request.auth.uid == document"
+        }
+      ]
+    },
+    {
+      "name": "assets",
+      "fields": [
+        { "name": "userId", "type": "string" },
+        { "name": "assetId", "type": "string" },
+        { "name": "assetName", "type": "string" },
+        { "name": "assetType", "type": "string" }
+      ],
+      "rules": [
+        {
+          "allow": "read, write",
+          "condition": "request.auth != null && request.auth.uid == resource.data.userId"
+        },
+        {
+          "allow": "create",
+          "condition": "request.auth != null && request.auth.uid == request.resource.data.userId"
+        }
+      ]
+    },
+    {
+      "name": "purchases",
+      "fields": [
+        { "name": "userId", "type": "string" },
+        { "name": "purchaseId", "type": "string" },
+        { "name": "assetId", "type": "string" }
+      ],
+      "rules": [
+        {
+          "allow": "read, write",
+          "condition": "request.auth != null && request.auth.uid == resource.data.userId"
+        },
+        {
+          "allow": "create",
+          "condition": "request.auth != null && request.auth.uid == request.resource.data.userId"
+        }
+      ]
+    },
+    {
+      "name": "sales",
+      "fields": [
+        { "name": "userId", "type": "string" },
+        { "name": "saleId", "type": "string" },
+        { "name": "assetId", "type": "string" }
+      ],
+      "rules": [
+        {
+          "allow": "read, write",
+          "condition": "request.auth != null && request.auth.uid == resource.data.userId"
+        },
+        {
+          "allow": "create",
+          "condition": "request.auth != null && request.auth.uid == request.resource.data.userId"
+        }
+      ]
+    },
+    {
+      "name": "transactions",
+      "fields": [
+        { "name": "userId", "type": "string" },
+        { "name": "txId", "type": "string" }
+      ],
+      "rules": [
+        {
+          "allow": "read, write",
+          "condition": "request.auth != null && request.auth.uid == resource.data.userId"
+        },
+        {
+          "allow": "create",
+          "condition": "request.auth != null && request.auth.uid == request.resource.data.userId"
+        }
+      ]
+    }
+  ]
+}

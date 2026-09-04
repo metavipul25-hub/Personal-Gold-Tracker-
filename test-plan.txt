@@ -1,0 +1,9 @@
+1. Add state `isQuickEntryModalOpen` in `App.tsx`
+2. Add a `QuickTransactionModal.tsx` in `src/components/modals/`
+3. Expose it via `WorkbookHeader.tsx` (button "+ Quick Tx" and "+ Adv. Tx")
+4. Inside `QuickTransactionModal.tsx`:
+   - Step 1: Tx Type selection
+   - Step 2: Asset context (Select existing asset or basic create for acquisitions)
+   - Step 3: Details (Weight, cost, etc)
+   - Step 4: Review
+   - Step 5: Save (call `TransactionService`, `saveWorkbookBatch`, close)

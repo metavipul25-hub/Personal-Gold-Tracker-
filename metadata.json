@@ -1,0 +1,6 @@
+{
+  "name": "Gold Tracker System",
+  "description": "A comprehensive Excel and Google Sheets financial gold asset tracking system with portfolio valuations, asset registers, transaction history, and dashboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
