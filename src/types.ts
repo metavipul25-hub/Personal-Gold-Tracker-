@@ -321,28 +321,76 @@ export interface PurityMasterRecord extends MasterDataRecord {
 }
 
 export interface MasterDataLists {
-  locations: MasterDataRecord[];
-  owners: MasterDataRecord[];
-  categories: MasterDataRecord[];
-  assetTypes: MasterDataRecord[];
+  // 🥇 Metal & Purity
   metalTypes: MasterDataRecord[];
   purities: PurityMasterRecord[];
-  stoneTypes?: MasterDataRecord[];
-  
-  // Keep legacy string arrays for things we aren't migrating to full objects yet, 
-  // or migrate them all if easier. The prompt mentioned specific ones:
-  // Owners, Locations, Asset Types, Metal Types, Jewellery Categories, Purity/Fineness, Transaction Types
+  finenesses: MasterDataRecord[];
+  weightUnits: MasterDataRecord[];
+
+  // 💎 Stones
+  stoneTypes: MasterDataRecord[];
+  stoneNames: MasterDataRecord[];
+  stoneShapes: MasterDataRecord[];
+  stoneColors: MasterDataRecord[];
+  stoneClarity: MasterDataRecord[];
+  stoneTreatments: MasterDataRecord[];
+  stoneOrigins: MasterDataRecord[];
+  stoneGrades: MasterDataRecord[];
+  stoneSettings: MasterDataRecord[];
+  certificateIssuers: MasterDataRecord[];
+
+  // 💍 Assets
+  assetTypes: MasterDataRecord[];
+  categories: MasterDataRecord[];
+  subcategories: MasterDataRecord[];
+  assetGroups: MasterDataRecord[];
+
+  // 👤 People & Ownership
+  owners: MasterDataRecord[];
+  relationships: MasterDataRecord[];
+  ownershipTypes: MasterDataRecord[];
+
+  // 🏠 Locations
+  locations: MasterDataRecord[];
+  locationTypes: MasterDataRecord[];
+
+  // 📜 Acquisition
+  acquisitionTypes: MasterDataRecord[];
+  purchaseSources: MasterDataRecord[];
+  originalSources: MasterDataRecord[];
+
+  // 🔄 Transactions
   transactionTypes: MasterDataRecord[];
+  transactionStatuses: MasterDataRecord[];
+
+  // 📊 Status
+  assetStatuses: MasterDataRecord[];
+  pledgeStatuses: MasterDataRecord[];
+  auditStatuses: MasterDataRecord[];
+
+  // 📄 Documents
+  documentTypes: MasterDataRecord[];
+  documentStatuses: MasterDataRecord[];
+
+  // 🔍 Validation / Audit
+  issueTypes: MasterDataRecord[];
+  issueSeverities: MasterDataRecord[];
+
+  // 🎯 Goals & SIP
+  goalTypes: MasterDataRecord[];
+  goalPriorities: MasterDataRecord[];
+  goalStatuses: MasterDataRecord[];
+  sipFrequencies: MasterDataRecord[];
+  sipStatuses: MasterDataRecord[];
+
+  // ⚙️ System
+  currencies: MasterDataRecord[];
+  units: MasterDataRecord[];
+  dateFormats: MasterDataRecord[];
+  displayPreferences: MasterDataRecord[];
   
-  // The rest can be legacy or upgraded:
-  finenesses: string[];
-  weightUnits: string[];
-  paymentModes: string[];
-  ownershipTypes: string[];
-  relationships: string[];
-  assetStatuses: string[];
-  transactionStatuses: string[];
-  documentTypes: string[];
-  validationStatuses: string[];
-  transactionReasons: string[];
+  // Legacy fields (optional but good for backwards compat if needed, although we are updating everything)
+  paymentModes?: string[];
+  transactionReasons?: string[];
+  validationStatuses?: string[];
 }

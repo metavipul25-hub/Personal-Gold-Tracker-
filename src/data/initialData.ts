@@ -16,12 +16,21 @@ const mapToMaster = (arr: string[], prefix: string) => arr.map((name, i) => ({
 }));
 
 export const INITIAL_MASTER_DATA: MasterDataLists = {
-  locations: mapToMaster(['Home', 'Bank Locker', 'Office', 'Safe', 'Other'], 'LOC'),
-  owners: mapToMaster(['Self', 'Father', 'Mother', 'Spouse', 'Son', 'Daughter', 'Brother', 'Sister', 'Other Relative', 'Joint / Trust', 'Other', 'Parent', 'Child'], 'OWN'),
-  categories: mapToMaster(['Chain', 'Ring', 'Necklace', 'Bangle', 'Bracelet', 'Earrings', 'Pendant', 'Coin', 'Bar', 'Minted Bar', 'Coin / Medallion', 'Other'], 'CAT'),
-  assetTypes: mapToMaster(['Jewellery', 'Gold Bar', 'Gold Coin', 'Gold Biscuit', 'Bar', 'Coin', 'Other Gold Asset'], 'AST'),
-  metalTypes: mapToMaster(['Gold', 'Silver', 'Platinum', 'Gold & Stones', 'Other'], 'MET'),
-  
+  // 🥇 Metal & Purity
+  metalTypes: mapToMaster(['Gold', 'Silver', 'Platinum', 'Palladium', 'Gold & Stones', 'Other'], 'MET'),
+  purities: [
+    { id: '24K', name: '24K', karat: '24K', fineness: 999, percentage: 99.9, isActive: true },
+    { id: '22K', name: '22K', karat: '22K', fineness: 916, percentage: 91.6, isActive: true },
+    { id: '21K', name: '21K', karat: '21K', fineness: 875, percentage: 87.5, isActive: true },
+    { id: '20K', name: '20K', karat: '20K', fineness: 833, percentage: 83.3, isActive: true },
+    { id: '18K', name: '18K', karat: '18K', fineness: 750, percentage: 75.0, isActive: true },
+    { id: '14K', name: '14K', karat: '14K', fineness: 585, percentage: 58.5, isActive: true },
+    { id: '10K', name: '10K', karat: '10K', fineness: 417, percentage: 41.7, isActive: true },
+  ],
+  finenesses: mapToMaster(['999.9', '999', '995', '916', '875', '750', '585', '417'], 'FIN'),
+  weightUnits: mapToMaster(['Grams', 'Ounces', 'Kilograms', 'Tola', 'Carat (Stones)'], 'UWT'),
+
+  // 💎 Stones
   stoneTypes: [
     { id: 'STN-TYPE-01', name: 'Diamond', isActive: true },
     { id: 'STN-TYPE-02', name: 'Ruby', isActive: true },
@@ -35,27 +44,70 @@ export const INITIAL_MASTER_DATA: MasterDataLists = {
     { id: 'STN-TYPE-10', name: 'Other', isActive: true },
     { id: 'STN-TYPE-11', name: 'Unspecified / Legacy', isActive: true }
   ],
+  stoneNames: mapToMaster(['Natural Diamond', 'Lab-Grown Diamond', 'Zambian Emerald', 'Colombian Emerald', 'Burmese Ruby', 'Mozambique Ruby', 'Ceylon Sapphire', 'Basra Pearl', 'South Sea Pearl'], 'STNM'),
+  stoneShapes: mapToMaster(['Round Brilliant', 'Princess', 'Emerald Cut', 'Oval', 'Pear', 'Marquise', 'Cushion', 'Radiant', 'Heart', 'Asscher', 'Cabochon', 'Other'], 'STSH'),
+  stoneColors: mapToMaster(['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K-M', 'Fancy Yellow', 'Fancy Pink', 'Fancy Blue', 'Pigeon Blood Red', 'Royal Blue', 'Vivid Green', 'Unspecified'], 'STCOL'),
+  stoneClarity: mapToMaster(['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3', 'Eye Clean', 'Included'], 'STCLA'),
+  stoneTreatments: mapToMaster(['None / Untreated', 'Heated', 'Glass Filled', 'Oiled', 'Irradiated', 'Bleached', 'Dyed', 'Unknown'], 'STTR'),
+  stoneOrigins: mapToMaster(['Zambia', 'Colombia', 'Myanmar (Burma)', 'Sri Lanka (Ceylon)', 'Kashmir', 'Mozambique', 'Australia', 'Tahiti', 'Unknown'], 'STOR'),
+  stoneGrades: mapToMaster(['Excellent', 'Very Good', 'Good', 'Fair', 'Poor'], 'STGR'),
+  stoneSettings: mapToMaster(['Prong', 'Bezel', 'Channel', 'Pave', 'Tension', 'Halo', 'Flush', 'Bar', 'Invisible'], 'STSET'),
+  certificateIssuers: mapToMaster(['GIA', 'IGI', 'HRD', 'AGS', 'EGL', 'GSI', 'SSEF', 'Gübelin', 'Local Jeweller', 'None'], 'STCERT'),
 
-purities: [
-    { id: '24K', name: '24K', karat: '24K', fineness: 999, percentage: 99.9, isActive: true },
-    { id: '22K', name: '22K', karat: '22K', fineness: 916, percentage: 91.6, isActive: true },
-    { id: '21K', name: '21K', karat: '21K', fineness: 875, percentage: 87.5, isActive: true },
-    { id: '20K', name: '20K', karat: '20K', fineness: 833, percentage: 83.3, isActive: true },
-    { id: '18K', name: '18K', karat: '18K', fineness: 750, percentage: 75.0, isActive: true },
-    { id: '14K', name: '14K', karat: '14K', fineness: 585, percentage: 58.5, isActive: true },
-    { id: '10K', name: '10K', karat: '10K', fineness: 417, percentage: 41.7, isActive: true },
-  ],
+  // 💍 Assets
+  assetTypes: mapToMaster(['Jewellery', 'Gold Bar', 'Gold Coin', 'Gold Biscuit', 'Bar', 'Coin', 'ETF', 'Sovereign Gold Bond (SGB)', 'Digital Gold', 'Other Gold Asset'], 'AST'),
+  categories: mapToMaster(['Chain', 'Ring', 'Necklace', 'Bangle', 'Bracelet', 'Earrings', 'Pendant', 'Coin', 'Bar', 'Minted Bar', 'Coin / Medallion', 'Other'], 'CAT'),
+  subcategories: mapToMaster(['Choker', 'Long Necklace (Haram)', 'Studs', 'Jhumkas', 'Hoops', 'Tennis Bracelet', 'Kada', 'Mangalsutra', 'Nath', 'Maang Tikka', 'Anklet', 'Watch', 'Other'], 'SUBC'),
+  assetGroups: mapToMaster(['Bridal Set', 'Everyday Wear', 'Investment Bullion', 'Ancestral Heirlooms', 'Digital Gold Portfolio'], 'AGRP'),
+
+  // 👤 People & Ownership
+  owners: mapToMaster(['Self', 'Father', 'Mother', 'Spouse', 'Son', 'Daughter', 'Brother', 'Sister', 'Other Relative', 'Joint / Trust', 'Other', 'Parent', 'Child'], 'OWN'),
+  relationships: mapToMaster(['Self', 'Spouse', 'Father', 'Mother', 'Son', 'Daughter', 'Brother', 'Sister', 'Grandfather', 'Grandmother', 'Father-in-law', 'Mother-in-law', 'Trustee', 'Other'], 'REL'),
+  ownershipTypes: mapToMaster(['Single', 'Joint - Survivor', 'Joint - Equal', 'HUF', 'Trust', 'Corporate'], 'OWNT'),
+
+  // 🏠 Locations
+  locations: mapToMaster(['Home', 'Bank Locker', 'Office', 'Safe', 'Other'], 'LOC'),
+  locationTypes: mapToMaster(['Bank Locker', 'Home Safe', 'Digital Vault', 'Private Vault', 'Pledged with Bank', 'Jeweller Safe'], 'LOCT'),
+
+  // 📜 Acquisition
+  acquisitionTypes: mapToMaster(['Purchase - New', 'Purchase - Exchange', 'Gift Received', 'Inheritance', 'Self-Made/Custom', 'Bonus/Reward'], 'ACQT'),
+  purchaseSources: mapToMaster(['Family Jeweller', 'Branded Retail (Tanishq, etc.)', 'Bullion Dealer', 'Bank', 'Online Platform', 'Private Individual', 'International Duty-Free', 'Other'], 'PSRC'),
+  originalSources: mapToMaster(['Purchased by Self', 'Purchased by Parents', 'Purchased by Grandparents', 'Purchased by In-laws', 'Unknown Ancestral'], 'OSRC'),
+
+  // 🔄 Transactions
   transactionTypes: mapToMaster(['PURCHASE', 'OPENING BALANCE', 'GIFT RECEIVED', 'GIFT GIVEN', 'INHERITANCE RECEIVED', 'INHERITANCE TRANSFERRED', 'OWNER TRANSFER', 'LOCATION TRANSFER', 'SALE', 'CORRECTION', 'REVERSAL', 'ASSET SPLIT', 'ASSET MERGE', 'OTHER'], 'TX'),
-  finenesses: ['999', '995', '916', '875', '750', '585'],
-  weightUnits: ['Grams', 'Ounces', 'Kilograms', 'Tola'],
+  transactionStatuses: mapToMaster(['COMPLETED', 'PENDING', 'REVERSED', 'CANCELLED', 'IN TRANSIT'], 'TXS'),
+
+  // 📊 Status
+  assetStatuses: mapToMaster(['ACTIVE', 'PARTIALLY SOLD', 'SOLD', 'GIFTED', 'TRANSFERRED', 'INACTIVE', 'IN TRANSIT', 'PLEDGED', 'LOST/STOLEN', 'OTHER'], 'ASTS'),
+  pledgeStatuses: mapToMaster(['Not Pledged', 'Pledged for Gold Loan', 'Pledged as Collateral', 'Released'], 'PLGS'),
+  auditStatuses: mapToMaster(['Verified', 'Pending Verification', 'Mismatch Found', 'Missing', 'Not Applicable'], 'AUDS'),
+
+  // 📄 Documents
+  documentTypes: mapToMaster(['Tax Invoice', 'Estimate/Kaccha Bill', 'Valuation Certificate', 'GIA/Diamond Certificate', 'Hallmark Certificate', 'Import/Customs Receipt', 'Gift Deed', 'Will/Inheritance Document', 'Insurance Policy', 'Pledge Receipt', 'Photo/Image', 'Other'], 'DOC'),
+  documentStatuses: mapToMaster(['Original Available', 'Photocopy Only', 'Digital Copy', 'Missing/Lost', 'Not Applicable'], 'DOCS'),
+
+  // 🔍 Validation / Audit
+  issueTypes: mapToMaster(['Missing Weight', 'Missing Purity', 'Missing HUID', 'Invalid Price', 'Location Mismatch', 'Missing Documents', 'Unverified Asset'], 'ISST'),
+  issueSeverities: mapToMaster(['Critical', 'High', 'Medium', 'Low', 'Info'], 'ISSS'),
+
+  // 🎯 Goals & SIP
+  goalTypes: mapToMaster(['Child Marriage', 'Child Education', 'Retirement', 'Wealth Transfer/Legacy', 'Emergency Corpus', 'House Purchase', 'Other'], 'GLT'),
+  goalPriorities: mapToMaster(['High', 'Medium', 'Low'], 'GLP'),
+  goalStatuses: mapToMaster(['Not Started', 'In Progress', 'On Track', 'Delayed', 'Achieved', 'Abandoned'], 'GLS'),
+  sipFrequencies: mapToMaster(['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually'], 'SIPF'),
+  sipStatuses: mapToMaster(['Active', 'Paused', 'Completed', 'Cancelled', 'Defaulted'], 'SIPS'),
+
+  // ⚙️ System
+  currencies: mapToMaster(['INR', 'USD', 'AED', 'EUR', 'GBP', 'SGD'], 'CUR'),
+  units: mapToMaster(['Metric (Grams)', 'Imperial (Ounces)', 'Traditional (Tola)'], 'UNT'),
+  dateFormats: mapToMaster(['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD'], 'DTF'),
+  displayPreferences: mapToMaster(['Light Mode', 'Dark Mode', 'System Default'], 'DISP'),
+
+  // Legacy fallback fields
   paymentModes: ['Cash', 'Bank Transfer', 'UPI', 'Card', 'Cheque', 'Other', 'Not Applicable'],
-  ownershipTypes: ['Single', 'Joint', 'Trust'],
-  relationships: ['Self', 'Father', 'Mother', 'Spouse', 'Son', 'Daughter', 'Brother', 'Sister', 'Other Relative', 'Other'],
-  assetStatuses: ['ACTIVE', 'PARTIALLY SOLD', 'SOLD', 'GIFTED', 'TRANSFERRED', 'INACTIVE', 'OTHER'],
-  transactionStatuses: ['COMPLETED', 'PENDING', 'REVERSED'],
-  documentTypes: ['Invoice', 'Certificate', 'Receipt', 'Valuation Report', 'Other'],
-  validationStatuses: ['VALID', 'WARNING', 'ERROR'],
-  transactionReasons: ['Investment', 'Wedding', 'Gift', 'Emergency', 'Routine', 'Other']
+  transactionReasons: ['Investment', 'Wedding', 'Gift', 'Emergency', 'Routine', 'Other'],
+  validationStatuses: ['VALID', 'WARNING', 'ERROR']
 };;
 
 export const INITIAL_LOCKERS: LockerDef[] = [
