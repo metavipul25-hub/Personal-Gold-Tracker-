@@ -131,6 +131,10 @@ export const MasterDataSheet: React.FC<MasterDataSheetProps> = ({ masterData, se
   const [activeListKey, setActiveListKey] = useState<keyof MasterDataLists>(MASTER_DATA_GROUPS[0].lists[0].key as keyof MasterDataLists);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
+  
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newValue, setNewValue] = useState('');
+  const [newIsActive, setNewIsActive] = useState(true);
 
   if (!masterData) return null;
 
@@ -152,11 +156,17 @@ export const MasterDataSheet: React.FC<MasterDataSheetProps> = ({ masterData, se
     setEditingId(null);
   };
 
-  const handleAddItem = () => {
-    const newVal = window.prompt(`Add new item to ${activeListConfig?.label}:`);
-    if (newVal && newVal.trim() && setMasterData) {
+  const openAddModal = () => {
+    setNewValue('');
+    setNewIsActive(true);
+    setIsAddModalOpen(true);
+  };
+
+  const handleAddItem = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newValue.trim() && setMasterData) {
       const isStringList = currentList.length > 0 && typeof currentList[0] === 'string';
-      const cleanVal = newVal.trim();
+      const cleanVal = newValue.trim();
       const lowerVal = cleanVal.toLowerCase();
 
       // Check for dupe
@@ -176,7 +186,7 @@ export const MasterDataSheet: React.FC<MasterDataSheetProps> = ({ masterData, se
         newItem = {
           id: `MST-${Date.now().toString().slice(-6)}`,
           name: cleanVal,
-          isActive: true
+          isActive: newIsActive
         };
 
         if (activeListKey === 'purities') {
@@ -193,6 +203,7 @@ export const MasterDataSheet: React.FC<MasterDataSheetProps> = ({ masterData, se
         ...masterData,
         [activeListKey]: [...currentList, newItem]
       });
+      setIsAddModalOpen(false);
     }
   };
 
@@ -396,7 +407,70 @@ export const MasterDataSheet: React.FC<MasterDataSheetProps> = ({ masterData, se
             </div>
           </div>
         </div>
-      </div>
+      
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden flex flex-col">
+            <div className="bg-slate-950 border-b border-slate-800 p-4 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
+                <Plus className="w-4 h-4 text-emerald-400" />
+                Add {activeListConfig?.label}
+              </h3>
+              <button onClick={() => setIsAddModalOpen(false)} className="text-slate-400 hover:text-slate-200 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddItem} className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">Name / Value</label>
+                <input 
+                  type="text" 
+                  value={newValue}
+                  onChange={(e) => setNewValue(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  placeholder="Enter name..."
+                  autoFocus
+                  required
+                />
+              </div>
+              
+              {!(currentList.length > 0 && typeof currentList[0] === 'string') && (
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    id="newIsActive"
+                    checked={newIsActive}
+                    onChange={(e) => setNewIsActive(e.target.checked)}
+                    className="w-4 h-4 text-emerald-500 bg-slate-900 border-slate-700 rounded focus:ring-emerald-500 focus:ring-offset-slate-900"
+                  />
+                  <label htmlFor="newIsActive" className="text-sm font-medium text-slate-300">
+                    Active
+                  </label>
+                </div>
+              )}
+              
+              <div className="pt-2 flex justify-end gap-3 border-t border-slate-800 mt-4">
+                <button 
+                  type="button"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={!newValue.trim()}
+                  className="px-4 py-2 text-sm font-medium text-slate-900 bg-emerald-400 border border-emerald-500 rounded-lg hover:bg-emerald-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
   );
 };

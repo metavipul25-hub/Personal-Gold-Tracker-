@@ -429,15 +429,15 @@ export const runAuditAndValidation = (
       });
     }
     
-    if (t.type === 'LOCATION TRANSFER' && t.location === t.details /* basic hack */) {
+    if (t.type === 'LOCATION TRANSFER' && !t.location) {
       issues.push({
-        id: `WARN-LOC-SAME-${t.txId}`,
+        id: `WARN-LOC-MISSING-${t.txId}`,
         type: 'WARNING',
         sheet: 'TRANSACTIONS',
         recordId: t.txId,
         field: 'Location',
-        message: `Location Transfer ${t.txId} might have no location change.`,
-        recommendation: 'Verify location change.'
+        message: `Location Transfer ${t.txId} has no destination location specified.`,
+        recommendation: 'Specify a destination location.'
       });
     }
   });
@@ -476,9 +476,9 @@ export const runAuditAndValidation = (
     const isRefValid = (list: any[], id: string) => {
       if (!id) return true; // Optional fields might be empty, handled elsewhere if required
       if (list.length > 0 && typeof list[0] === 'string') {
-        return list.includes(id);
+        return list.some(item => typeof item === 'string' && item.toLowerCase() === id.toLowerCase());
       }
-      return list.some(item => item.id === id);
+      return list.some(item => item.id === id || item.name === id || (item.name && item.name.toLowerCase() === id.toLowerCase()));
     };
 
     const isRefActive = (list: any[], id: string) => {
@@ -486,7 +486,7 @@ export const runAuditAndValidation = (
       if (list.length > 0 && typeof list[0] === 'string') {
         return true; // Strings don't have active/inactive
       }
-      const record = list.find(item => item.id === id);
+      const record = list.find(item => item.id === id || item.name === id || (item.name && item.name.toLowerCase() === id.toLowerCase()));
       return record ? record.isActive : true; // If not found, handled by isRefValid
     };
 

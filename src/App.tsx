@@ -91,7 +91,7 @@ export const App: React.FC = () => {
   // Dynamic QA & Audit Issues scanning
   const validationIssues = useMemo(() => {
     return runAuditAndValidation(assets, transactions, masterData);
-  }, [assets, transactions]);
+  }, [assets, transactions, masterData]);
 
   const auditErrorCount = validationIssues.filter(i => i.type === 'ERROR').length;
 
