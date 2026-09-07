@@ -32,6 +32,7 @@ import { useCloudState, saveWorkbookBatch, useSyncStatus } from './lib/useCloudW
 import { WorkbookHeader } from './components/WorkbookHeader';
 import { auth } from './lib/firebase';
 import { signOut } from 'firebase/auth';
+import { AlertTriangle } from 'lucide-react';
 import { FormulaBar } from './components/FormulaBar';
 import { SheetTabs } from './components/SheetTabs';
 
@@ -87,6 +88,7 @@ export const App: React.FC = () => {
   const [isQuickTransactionModalOpen, setIsQuickTransactionModalOpen] = useState(false);
   const [lifecycleAssetId, setLifecycleAssetId] = useState<string | null>(null);
   const [isRateModalOpen, setIsRateModalOpen] = useState(false);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   // Dynamic QA & Audit Issues scanning
   const validationIssues = useMemo(() => {
@@ -134,18 +136,24 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleResetData = async () => {
-    if (window.confirm('Reset workbook data to default master financial dataset?')) {
-      try {
-        await saveWorkbookBatch([
-          { key: 'assets', data: INITIAL_ASSETS },
-          { key: 'transactions', data: INITIAL_TRANSACTIONS },
-          { key: 'lockers', data: INITIAL_LOCKERS },
-          { key: 'snapshots', data: INITIAL_VERSION_SNAPSHOTS }
-        ]);
-      } catch (e: any) {
-        alert("Reset failed: " + (e.message || "Please retry."));
-      }
+  const handleResetData = () => {
+    setIsResetConfirmOpen(true);
+  };
+  
+  const confirmResetData = async () => {
+    try {
+      await saveWorkbookBatch([
+        { key: 'assets', data: INITIAL_ASSETS },
+        { key: 'transactions', data: INITIAL_TRANSACTIONS },
+        { key: 'lockers', data: INITIAL_LOCKERS },
+        { key: 'snapshots', data: INITIAL_VERSION_SNAPSHOTS },
+        { key: 'sipPlans', data: INITIAL_SIP_PLANS },
+        { key: 'lifeGoals', data: INITIAL_LIFE_GOALS }
+      ]);
+      setIsResetConfirmOpen(false);
+    } catch (e: any) {
+      alert("Clear data failed: " + (e.message || "Please retry."));
+      setIsResetConfirmOpen(false);
     }
   };
 
@@ -438,6 +446,50 @@ export const App: React.FC = () => {
         existingTxCount={transactions.length}
         assets={assets}
       />
+
+      
+      {/* Asset Lifecycle Modal */}
+      {lifecycleAssetId && (
+        <AssetLifecycleModal
+          assetId={lifecycleAssetId}
+          assets={assets}
+          transactions={transactions}
+          onClose={() => setLifecycleAssetId(null)}
+          onNavigateToAsset={(id) => setLifecycleAssetId(id)}
+        />
+      )}
+
+      {/* Reset Confirmation Modal */}
+
+      {isResetConfirmOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden flex flex-col p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-red-500/20 rounded-full text-red-500">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-100">Clear All Data</h3>
+            </div>
+            <p className="text-slate-300 text-sm mb-6">
+              Are you sure you want to completely clear all data? This will give you a clean slate. Master Data settings will be preserved, but all assets and transactions will be permanently deleted.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button 
+                onClick={() => setIsResetConfirmOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmResetData}
+                className="px-4 py-2 text-sm font-medium text-slate-900 bg-red-500 hover:bg-red-400 border border-red-600 rounded-lg transition-colors"
+              >
+                Clear Data
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
