@@ -19,7 +19,8 @@ import {
   Trash2, 
   Info,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  History
 } from 'lucide-react';
 
 interface AssetRegisterSheetProps {
@@ -425,7 +426,7 @@ export const AssetRegisterSheet: React.FC<AssetRegisterSheetProps> = ({
                             className="p-1 hover:text-indigo-400 text-slate-400 hover:bg-slate-800 rounded transition-colors"
                             title="View Lifecycle Lineage"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <History className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </td>
