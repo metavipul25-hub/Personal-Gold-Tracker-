@@ -117,6 +117,50 @@ export const ReportsSheet: React.FC<ReportsSheetProps> = ({ assets, transactions
   };
 
   
+
+  const renderStones = () => {
+    const assetsWithStones = assets.filter(a => a.stoneWeight && a.stoneWeight > 0);
+    return (
+       <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col flex-1 p-4">
+          <div className="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+            <div>
+              <h3 className="font-bold text-slate-800 text-xl">Stone Inventory Report</h3>
+              <p className="text-sm text-slate-500">Assets containing stones or diamonds</p>
+            </div>
+          </div>
+          <div className="overflow-auto flex-1">
+             <table className="w-full text-left border-collapse text-sm whitespace-nowrap">
+                <thead>
+                   <tr className="bg-slate-50 border-b border-slate-200 text-slate-500">
+                      <th className="p-3 font-medium">Asset ID</th>
+                      <th className="p-3 font-medium">Name</th>
+                      <th className="p-3 font-medium text-right">Gross Wt (g)</th>
+                      <th className="p-3 font-medium text-right">Stone Wt (g)</th>
+                      <th className="p-3 font-medium text-right">Net Gold Wt (g)</th>
+                   </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                   {assetsWithStones.map(a => (
+                     <tr key={a.assetId} className="hover:bg-slate-50/50">
+                        <td className="p-3 font-mono text-xs">{a.assetId}</td>
+                        <td className="p-3 font-medium text-slate-800">{a.assetName}</td>
+                        <td className="p-3 text-right">{a.grossWeight?.toFixed(3)}</td>
+                        <td className="p-3 text-right font-medium text-purple-600">{a.stoneWeight?.toFixed(3)}</td>
+                        <td className="p-3 text-right">{a.netGoldWeight?.toFixed(3)}</td>
+                     </tr>
+                   ))}
+                   {assetsWithStones.length === 0 && (
+                     <tr>
+                       <td colSpan={5} className="p-8 text-center text-slate-500">No assets with stones found.</td>
+                     </tr>
+                   )}
+                </tbody>
+             </table>
+          </div>
+       </div>
+    );
+  };
+
   const renderOpeningClosing = () => {
     // Requires sorting chronologically
     const allChronological = [...transactions].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -209,8 +253,8 @@ export const ReportsSheet: React.FC<ReportsSheetProps> = ({ assets, transactions
               <h3 className="font-bold text-slate-800 text-xl">Gold Holding Statement</h3>
               <p className="text-sm text-slate-500">As of {new Date().toLocaleDateString()}</p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 font-medium text-sm">
-              <Download className="w-4 h-4"/> Export PDF
+            <button onClick={handleExportExcel} className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 font-medium text-sm">
+              <Download className="w-4 h-4"/> Export Excel
             </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
@@ -287,7 +331,7 @@ export const ReportsSheet: React.FC<ReportsSheetProps> = ({ assets, transactions
                    ))}
                 </div>
              </div>
-             <button className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded">
+             <button onClick={handleExportExcel} className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded">
                <Download className="w-4 h-4"/> Export Excel
              </button>
           </div>
@@ -305,6 +349,7 @@ export const ReportsSheet: React.FC<ReportsSheetProps> = ({ assets, transactions
         {activeReport === 'LIFECYCLE' && renderLifecycle()}
         {activeReport === 'STATEMENT' && renderStatement()}
         {activeReport === 'OPENING_CLOSING' && renderOpeningClosing()}
+        {activeReport === 'STONES' && renderStones()}
       </div>
 
     </div>
