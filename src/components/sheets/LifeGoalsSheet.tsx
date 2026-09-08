@@ -68,6 +68,7 @@ export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets, s
                 <th className="p-2.5 border-r border-slate-800">Category</th>
                 <th className="p-2.5 border-r border-slate-800 text-right">Target Year</th>
                 <th className="p-2.5 border-r border-slate-800 text-right">Target Weight (g)</th>
+                <th className="p-2.5 border-r border-slate-800 text-right">Target Value (₹)</th>
                 <th className="p-2.5 border-r border-slate-800 text-right">Current Allocated (g)</th>
                 <th className="p-2.5 border-r border-slate-800">Progress</th>
                 <th className="p-2.5">Allocated Assets</th>
@@ -76,7 +77,7 @@ export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets, s
             <tbody className="divide-y divide-slate-800/80 font-mono text-slate-300">
               {goals.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-8 text-center text-slate-500 font-sans">
+                  <td colSpan={9} className="p-8 text-center text-slate-500 font-sans">
                     No life goals defined.
                   </td>
                 </tr>
@@ -93,6 +94,7 @@ export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets, s
                       <td className="p-2.5 border-r border-slate-800/60 font-sans text-pink-300">{goal.category}</td>
                       <td className="p-2.5 border-r border-slate-800/60 text-right">{goal.targetYear}</td>
                       <td className="p-2.5 border-r border-slate-800/60 text-right font-bold text-amber-400">{goal.targetWeightGrams} g</td>
+                      <td className="p-2.5 border-r border-slate-800/60 text-right font-bold text-emerald-400">₹{goal.targetValueINR ? goal.targetValueINR.toLocaleString('en-IN') : '-'}</td>
                       <td className="p-2.5 border-r border-slate-800/60 text-right font-bold text-amber-200">{currentAllocatedWeight.toFixed(2)} g</td>
                       <td className="p-2.5 border-r border-slate-800/60 font-sans">
                         <div className="flex items-center gap-2">

@@ -98,6 +98,10 @@ export const LifeGoalModal: React.FC<LifeGoalModalProps> = ({
               <input type="number" min="0" step="1" value={formData.targetWeightGrams || ''} onChange={e => setFormData({...formData, targetWeightGrams: Number(e.target.value)})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-pink-500 focus:outline-none" />
             </div>
             <div>
+              <label className="block text-sm font-medium text-slate-400 mb-1">Target Value (₹)</label>
+              <input type="number" min="0" step="1000" value={formData.targetValueINR || ''} onChange={e => setFormData({...formData, targetValueINR: Number(e.target.value)})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-pink-500 focus:outline-none" placeholder="e.g. 500000" />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Target Year</label>
               <input type="number" min="2020" max="2100" step="1" value={formData.targetYear || ''} onChange={e => setFormData({...formData, targetYear: Number(e.target.value)})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-pink-500 focus:outline-none" />
             </div>
