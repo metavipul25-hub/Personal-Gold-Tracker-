@@ -1,12 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GoldSipPlan } from '../../types';
-import { Landmark, TrendingUp, Calendar, AlertCircle } from 'lucide-react';
+import { Landmark, TrendingUp, Calendar, AlertCircle, Plus, Edit2 } from 'lucide-react';
+import { SipPlanModal } from '../modals/SipPlanModal';
 
 interface SipPlansSheetProps {
   sipPlans: GoldSipPlan[];
+  setSipPlans?: (plans: GoldSipPlan[]) => void;
 }
 
-export const SipPlansSheet: React.FC<SipPlansSheetProps> = ({ sipPlans }) => {
+export const SipPlansSheet: React.FC<SipPlansSheetProps> = ({ sipPlans, setSipPlans }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<GoldSipPlan | undefined>(undefined);
+
+  const handleSavePlan = (plan: GoldSipPlan) => {
+    if (!setSipPlans) return;
+    const existingIndex = sipPlans.findIndex(p => p.id === plan.id);
+    if (existingIndex >= 0) {
+      const updated = [...sipPlans];
+      updated[existingIndex] = plan;
+      setSipPlans(updated);
+    } else {
+      setSipPlans([...sipPlans, plan]);
+    }
+  };
+
+  const handleDeletePlan = (id: string) => {
+    if (!setSipPlans) return;
+    setSipPlans(sipPlans.filter(p => p.id !== id));
+  };
+
   return (
     <div id="sheet-sip-container" className="p-4 space-y-4 text-slate-100 flex flex-col h-full">
       {/* Header */}
@@ -25,6 +47,14 @@ export const SipPlansSheet: React.FC<SipPlansSheetProps> = ({ sipPlans }) => {
             </p>
           </div>
         </div>
+        {setSipPlans && (
+          <button 
+            onClick={() => { setSelectedPlan(undefined); setIsModalOpen(true); }}
+            className="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-400 text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Add SIP Plan
+          </button>
+        )}
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-xl shadow-sm overflow-hidden flex-1 flex flex-col">
@@ -70,7 +100,17 @@ export const SipPlansSheet: React.FC<SipPlansSheetProps> = ({ sipPlans }) => {
                       {plan.accumulatedGrams > 0 ? `${plan.accumulatedGrams.toFixed(2)} g` : '-'}
                     </td>
                     <td className="p-2.5 text-slate-200">
-                      ₹{plan.totalInvested.toLocaleString('en-IN')}
+                      <div className="flex items-center justify-between gap-2">
+                        <span>₹{plan.totalInvested.toLocaleString('en-IN')}</span>
+                        {setSipPlans && (
+                          <button 
+                            onClick={() => { setSelectedPlan(plan); setIsModalOpen(true); }}
+                            className="p-1 hover:bg-slate-700 rounded text-slate-300"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -79,6 +119,15 @@ export const SipPlansSheet: React.FC<SipPlansSheetProps> = ({ sipPlans }) => {
           </table>
         </div>
       </div>
+      {isModalOpen && (
+        <SipPlanModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSavePlan}
+          onDelete={handleDeletePlan}
+          plan={selectedPlan}
+        />
+      )}
     </div>
   );
 };

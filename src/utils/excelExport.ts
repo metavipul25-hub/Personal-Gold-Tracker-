@@ -9,6 +9,22 @@ import { PURITY_MASTER_DATA } from './calculations';
 import { MasterDataLists } from '../types';
 import { getMasterName } from './masterData';
 
+/**
+ * Prevents CSV/Excel Formula Injection by prepending a single quote to strings 
+ * that start with =, +, -, or @. Leaves true numeric values and other types untouched.
+ */
+const sanitizeExcelString = (val: any): any => {
+  if (typeof val === 'string') {
+    const trimmed = val.trim();
+    if (trimmed.startsWith('=') || trimmed.startsWith('+') || trimmed.startsWith('-') || trimmed.startsWith('@')) {
+      return `'${val}`;
+    }
+  }
+  return val;
+};
+
+const sanitizeRow = (row: any[]) => row.map(sanitizeExcelString);
+
 export const exportWorkbookToExcel = (
   assets: AssetRecord[],
   transactions: TransactionHistoryRecord[],
@@ -43,7 +59,7 @@ export const exportWorkbookToExcel = (
     ['Total Purchase Cost', '= (Net Gold Weight * Purchase Rate) + Making Charges + Other Charges + GST'],
     
   ];
-  const wsReadme = XLSX.utils.aoa_to_sheet(readmeData);
+  const wsReadme = XLSX.utils.aoa_to_sheet(readmeData.map(sanitizeRow));
   XLSX.utils.book_append_sheet(wb, wsReadme, 'README');
 
   // 2. DASHBOARD Summary Sheet
@@ -86,7 +102,7 @@ export const exportWorkbookToExcel = (
       return [getMasterName(masterDataLists?.locations, loc), locAssets.length, (netWt ?? 0).toFixed(3), (cost ?? 0).toFixed(2), lockers];
     })
   ];
-  const wsDashboard = XLSX.utils.aoa_to_sheet(dashboardData);
+  const wsDashboard = XLSX.utils.aoa_to_sheet(dashboardData.map(sanitizeRow));
   XLSX.utils.book_append_sheet(wb, wsDashboard, 'DASHBOARD');
 
   // 3. ASSET REGISTER Sheet
@@ -130,7 +146,7 @@ export const exportWorkbookToExcel = (
     a.lastUpdated
   ]);
 
-  const wsAssetRegister = XLSX.utils.aoa_to_sheet([assetHeader, ...assetRows]);
+  const wsAssetRegister = XLSX.utils.aoa_to_sheet([sanitizeRow(assetHeader), ...assetRows.map(sanitizeRow)]);
   XLSX.utils.book_append_sheet(wb, wsAssetRegister, 'ASSET REGISTER');
 
 
@@ -149,7 +165,7 @@ export const exportWorkbookToExcel = (
     ['Bullion', 'Raw casting bullion / grains', 'Assay Certificate'],
     ['Digital / Certificate', 'Sovereign Gold Bonds, Vault Gold Receipts', 'Depository Ref']
   ];
-  const wsMaster = XLSX.utils.aoa_to_sheet(masterData);
+  const wsMaster = XLSX.utils.aoa_to_sheet(masterData.map(sanitizeRow));
   XLSX.utils.book_append_sheet(wb, wsMaster, 'MASTER DATA');
 
   // 7. TRANSACTION HISTORY Sheet
@@ -171,12 +187,20 @@ export const exportWorkbookToExcel = (
     t.details,
     t.performedBy
   ]);
-  const wsTx = XLSX.utils.aoa_to_sheet([txHeader, ...txRows]);
+  const wsTx = XLSX.utils.aoa_to_sheet([sanitizeRow(txHeader), ...txRows.map(sanitizeRow)]);
   XLSX.utils.book_append_sheet(wb, wsTx, 'TRANSACTION HISTORY');
+
+  const sanitizeObject = (obj: Record<string, any>) => {
+    const safeObj: Record<string, any> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      safeObj[sanitizeExcelString(key)] = sanitizeExcelString(value);
+    }
+    return safeObj;
+  };
 
   // Stones Export
   const wsStones = XLSX.utils.json_to_sheet(
-    assets.flatMap(a => (a.stones || []).map(s => ({
+    assets.flatMap(a => (a.stones || []).map(s => sanitizeObject({
       'Asset ID': a.assetId,
       'Asset Name': a.assetName,
       'Stone ID': s.id,
@@ -204,7 +228,7 @@ export const exportWorkbookToExcel = (
     v.message,
     v.recommendation
   ]);
-  const wsAudit = XLSX.utils.aoa_to_sheet([auditHeader, ...auditRows]);
+  const wsAudit = XLSX.utils.aoa_to_sheet([sanitizeRow(auditHeader), ...auditRows.map(sanitizeRow)]);
   XLSX.utils.book_append_sheet(wb, wsAudit, 'AUDIT & VALIDATION');
 
   // 9. TEST CASES Sheet

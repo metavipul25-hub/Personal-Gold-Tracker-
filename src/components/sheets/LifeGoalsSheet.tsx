@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LifeGoal, AssetRecord } from '../../types';
-import { Target, Star, FileText } from 'lucide-react';
+import { Target, Star, FileText, Plus, Edit2 } from 'lucide-react';
+import { LifeGoalModal } from '../modals/LifeGoalModal';
 
 interface LifeGoalsSheetProps {
   goals: LifeGoal[];
   assets: AssetRecord[];
+  setLifeGoals?: (goals: LifeGoal[]) => void;
 }
 
-export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets }) => {
+export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets, setLifeGoals }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<LifeGoal | undefined>(undefined);
+
+  const handleSaveGoal = (goal: LifeGoal) => {
+    if (!setLifeGoals) return;
+    const existingIndex = goals.findIndex(g => g.id === goal.id);
+    if (existingIndex >= 0) {
+      const updated = [...goals];
+      updated[existingIndex] = goal;
+      setLifeGoals(updated);
+    } else {
+      setLifeGoals([...goals, goal]);
+    }
+  };
+
+  const handleDeleteGoal = (id: string) => {
+    if (!setLifeGoals) return;
+    setLifeGoals(goals.filter(g => g.id !== id));
+  };
+
   return (
     <div id="sheet-goals-container" className="p-4 space-y-4 text-slate-100 flex flex-col h-full">
       {/* Header */}
@@ -26,6 +48,14 @@ export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets })
             </p>
           </div>
         </div>
+        {setLifeGoals && (
+          <button 
+            onClick={() => { setSelectedGoal(undefined); setIsModalOpen(true); }}
+            className="px-3 py-1.5 bg-pink-500 hover:bg-pink-400 text-slate-950 text-xs font-bold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Add Goal
+          </button>
+        )}
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-xl shadow-sm overflow-hidden flex-1 flex flex-col">
@@ -73,7 +103,17 @@ export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets })
                         </div>
                       </td>
                       <td className="p-2.5 font-sans text-[10px] text-slate-400">
-                        {goal.allocatedAssetIds.join(', ')}
+                        <div className="flex items-center justify-between gap-2">
+                          <span>{goal.allocatedAssetIds.length > 0 ? goal.allocatedAssetIds.join(', ') : 'None'}</span>
+                          {setLifeGoals && (
+                            <button 
+                              onClick={() => { setSelectedGoal(goal); setIsModalOpen(true); }}
+                              className="p-1 hover:bg-slate-700 rounded text-slate-300"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -83,6 +123,16 @@ export const LifeGoalsSheet: React.FC<LifeGoalsSheetProps> = ({ goals, assets })
           </table>
         </div>
       </div>
+      {isModalOpen && (
+        <LifeGoalModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveGoal}
+          onDelete={handleDeleteGoal}
+          goal={selectedGoal}
+          assets={assets}
+        />
+      )}
     </div>
   );
 };

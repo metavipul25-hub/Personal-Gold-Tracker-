@@ -253,7 +253,7 @@ export const ReportsSheet: React.FC<ReportsSheetProps> = ({ assets, transactions
               <h3 className="font-bold text-slate-800 text-xl">Gold Holding Statement</h3>
               <p className="text-sm text-slate-500">As of {new Date().toLocaleDateString()}</p>
             </div>
-            <button onClick={handleExportExcel} className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 font-medium text-sm">
+            <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 font-medium text-sm">
               <Download className="w-4 h-4"/> Export Excel
             </button>
           </div>
@@ -331,7 +331,7 @@ export const ReportsSheet: React.FC<ReportsSheetProps> = ({ assets, transactions
                    ))}
                 </div>
              </div>
-             <button onClick={handleExportExcel} className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded">
+             <button className="text-sm text-blue-600 font-medium flex items-center gap-1 hover:bg-blue-50 px-2 py-1 rounded">
                <Download className="w-4 h-4"/> Export Excel
              </button>
           </div>

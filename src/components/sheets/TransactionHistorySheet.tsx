@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TransactionHistoryRecord } from '../../types';
 import { getTransactionInventoryImpact, getTransactionNetWeightImpact, getTransactionFineGoldImpact, parsePurityToFineness } from '../../utils/calculations';
 
-import { History, Search, Filter, ShoppingBag, BadgePercent, ArrowRightLeft, TrendingUp } from 'lucide-react';
+import { History, Search, Filter, ShoppingBag, BadgePercent, ArrowRightLeft, TrendingUp, Plus } from 'lucide-react';
 
 interface TransactionHistorySheetProps {
   transactions: TransactionHistoryRecord[];
@@ -61,7 +61,15 @@ export const TransactionHistorySheet: React.FC<TransactionHistorySheetProps> = (
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          {onAddTransaction && (
+            <button 
+              onClick={onAddTransaction}
+              className="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg shadow-sm font-semibold flex items-center gap-1.5 transition-colors border border-cyan-500"
+            >
+              <Plus className="w-4 h-4" /> Add Transaction
+            </button>
+          )}
           <div className="flex items-center gap-2 bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-1.5 min-w-[220px]">
             <Search className="w-4 h-4 text-slate-400" />
             <input
@@ -91,8 +99,8 @@ export const TransactionHistorySheet: React.FC<TransactionHistorySheetProps> = (
       </div>
 
       {/* Table */}
-      <div className="flex-1 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col">
-        <div className="overflow-x-auto overflow-y-auto max-h-[620px] scrollbar-thin">
+      <div className="flex-1 min-h-0 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col">
+        <div className="overflow-x-auto overflow-y-auto flex-1 min-h-0 scrollbar-thin">
           <table className="w-full text-xs text-left border-collapse select-none">
             <thead className="bg-slate-950 text-slate-400 font-semibold sticky top-0 z-10 border-b-2 border-slate-800">
               <tr className="divide-x divide-slate-800">

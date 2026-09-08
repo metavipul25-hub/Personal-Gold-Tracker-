@@ -205,8 +205,8 @@ export const AssetRegisterSheet: React.FC<AssetRegisterSheetProps> = ({
       </div>
 
       {/* Structured Table Container with Excel Grid */}
-      <div className="flex-1 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col">
-        <div className="overflow-x-auto overflow-y-auto max-h-[620px] scrollbar-thin">
+      <div className="flex-1 min-h-0 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col">
+        <div className="overflow-x-auto overflow-y-auto flex-1 min-h-0 scrollbar-thin">
           <table className="w-full text-xs text-left border-collapse select-none">
             {/* Excel Header */}
             <thead className="bg-slate-950 text-slate-400 font-semibold sticky top-0 z-10 border-b-2 border-slate-800 shadow-sm">

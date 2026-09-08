@@ -376,11 +376,11 @@ export const App: React.FC = () => {
         )}
 
         {activeSheet === 'SIP_PLANS' && (
-          <SipPlansSheet sipPlans={sipPlans} />
+          <SipPlansSheet sipPlans={sipPlans} setSipPlans={setSipPlans} />
         )}
 
         {activeSheet === 'LIFE_GOALS' && (
-          <LifeGoalsSheet goals={lifeGoals} assets={assets} />
+          <LifeGoalsSheet goals={lifeGoals} setLifeGoals={setLifeGoals} assets={assets} />
         )}
   
       </main>
@@ -500,7 +500,13 @@ export const App: React.FC = () => {
                 Cancel
               </button>
               <button 
-                onClick={confirmRestoreData}
+                onClick={() => {
+                  if (restoreFile) {
+                    handleRestore(restoreFile);
+                    setIsRestoreConfirmOpen(false);
+                    setRestoreFile(null);
+                  }
+                }}
                 className="px-4 py-2 text-sm font-medium text-slate-900 bg-red-500 hover:bg-red-400 border border-red-600 rounded-lg transition-colors"
               >
                 Proceed with Restore
