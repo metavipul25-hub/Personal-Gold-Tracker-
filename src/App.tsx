@@ -28,6 +28,9 @@ import { exportWorkbookToExcel } from './utils/excelExport';
 import { calculateAssetAvailableQuantity } from './utils/calculations';
 import { useCloudState, saveWorkbookBatch, useSyncStatus } from './lib/useCloudWorkbook';
 
+import { validateAppBackup } from './utils/backupValidation';
+import { validateUploadedFile } from './utils/fileValidation';
+
 // Components
 import { WorkbookHeader } from './components/WorkbookHeader';
 import { auth } from './lib/firebase';
@@ -185,10 +188,21 @@ export const App: React.FC = () => {
 
   const handleRestore = async (file: File) => {
     try {
+      const fileValidation = validateUploadedFile(file, {
+        allowedMimeTypes: ['application/json'],
+        allowedExtensions: ['.json']
+      });
+
+      if (!fileValidation.valid) {
+        throw new Error(fileValidation.error || 'Invalid file');
+      }
+
       const text = await file.text();
       const backup = JSON.parse(text);
-      if (!backup.version || !backup.data || !backup.data.assets) {
-        throw new Error('Invalid backup file format');
+      
+      const backupValidation = validateAppBackup(backup);
+      if (!backupValidation.valid) {
+        throw new Error(backupValidation.error || 'Invalid backup schema');
       }
 
       if (!window.confirm('RESTORE DATA\n\nThis will REPLACE ALL CURRENT DATA with the contents of the backup file.\n\nContinue?')) {
