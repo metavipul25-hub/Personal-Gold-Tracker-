@@ -256,7 +256,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                       value={assetData.assetName} 
                       onChange={e => setAssetData({...assetData, assetName: e.target.value})}
                       placeholder="e.g. Gold Chain 22K"
-                      className="w-full border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border" 
+                      className="w-full text-slate-900 bg-white border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border" 
                     />
                   </div>
                   <div>
@@ -264,7 +264,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                     <select 
                       value={assetData.owner} 
                       onChange={e => setAssetData({...assetData, owner: e.target.value})}
-                      className="w-full border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                      className="w-full text-slate-900 bg-white border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
                     >
                       <option value="">Select Owner</option>
                       {masterData?.owners.map(o => (
@@ -278,7 +278,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                       <select 
                         value={assetData.jewelleryCategory} 
                         onChange={e => setAssetData({...assetData, jewelleryCategory: e.target.value as any})}
-                        className="w-full border-slate-300 rounded-lg p-2 border"
+                        className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-2 border"
                       >
                         {masterData?.categories.map(c => (
                           <option key={c.id} value={c.name}>{c.name}</option>
@@ -290,7 +290,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                       <select 
                         value={assetData.purity} 
                         onChange={e => setAssetData({...assetData, purity: e.target.value as any})}
-                        className="w-full border-slate-300 rounded-lg p-2 border"
+                        className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-2 border"
                       >
                         {masterData?.purities.map(p => (
                           <option key={p.id} value={p.karat}>{p.karat}</option>
@@ -305,7 +305,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                   <select 
                     value={formData.assetId} 
                     onChange={e => setFormData({...formData, assetId: e.target.value})}
-                    className="w-full border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border"
+                    className="w-full text-slate-900 bg-white border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border"
                   >
                     <option value="">Select Asset...</option>
                     {availableAssets.map(a => (
@@ -335,7 +335,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                   type="date" 
                   value={formData.date} 
                   onChange={e => setFormData({...formData, date: e.target.value})}
-                  className="w-full border-slate-300 rounded-lg p-2 border focus:border-indigo-500 focus:ring-indigo-500" 
+                  className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-2 border focus:border-indigo-500 focus:ring-indigo-500" 
                 />
               </div>
 
@@ -347,7 +347,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                     value={formData.grossWeightGrams || ''} 
                     onChange={e => setFormData({...formData, grossWeightGrams: Number(e.target.value)})}
                     placeholder="0.00"
-                    className="w-full border-slate-300 rounded-lg p-3 border font-mono text-lg focus:border-indigo-500 focus:ring-indigo-500" 
+                    className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-3 border font-mono text-lg focus:border-indigo-500 focus:ring-indigo-500" 
                   />
                 </div>
                 <div>
@@ -357,7 +357,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                     value={formData.stoneWeightGrams || ''} 
                     onChange={e => setFormData({...formData, stoneWeightGrams: Number(e.target.value)})}
                     placeholder="0.00"
-                    className="w-full border-slate-300 rounded-lg p-3 border font-mono text-lg focus:border-indigo-500 focus:ring-indigo-500" 
+                    className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-3 border font-mono text-lg focus:border-indigo-500 focus:ring-indigo-500" 
                   />
                 </div>
               </div>
@@ -370,7 +370,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                     value={formData.amount || ''} 
                     onChange={e => setFormData({...formData, amount: Number(e.target.value)})}
                     placeholder="0"
-                    className="w-full border-slate-300 rounded-lg p-3 border font-mono text-lg focus:border-indigo-500 focus:ring-indigo-500" 
+                    className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-3 border font-mono text-lg focus:border-indigo-500 focus:ring-indigo-500" 
                   />
                 </div>
               )}
@@ -381,7 +381,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                   <select 
                     value={formData.newOwner || ''} 
                     onChange={e => setFormData({...formData, newOwner: e.target.value})}
-                    className="w-full border-slate-300 rounded-lg p-3 border focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-3 border focus:border-indigo-500 focus:ring-indigo-500"
                   >
                     <option value="">Select New Owner</option>
                     {masterData?.owners.map(o => (
@@ -397,7 +397,7 @@ export const QuickTransactionModal: React.FC<QuickTransactionModalProps> = ({
                   <select 
                     value={formData.location || ''} 
                     onChange={e => setFormData({...formData, location: e.target.value})}
-                    className="w-full border-slate-300 rounded-lg p-3 border focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full text-slate-900 bg-white border-slate-300 rounded-lg p-3 border focus:border-indigo-500 focus:ring-indigo-500"
                   >
                     <option value="">Select New Location</option>
                     {masterData?.locations.map(o => (

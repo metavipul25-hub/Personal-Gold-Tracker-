@@ -548,7 +548,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   <select 
                     value={formData.assetId || ''} 
                     onChange={e => setFormData({...formData, assetId: e.target.value})}
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                    className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
                   >
                     <option value="">-- Select Asset --</option>
                     {activeAssets.map(a => (
@@ -582,7 +582,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   </div>
                   <div className="mt-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">New Merged Asset Name</label>
-                    <input type="text" value={formData.assetName || ''} onChange={e => setFormData({...formData, assetName: e.target.value})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="E.g. Combined Coins" />
+                    <input type="text" value={formData.assetName || ''} onChange={e => setFormData({...formData, assetName: e.target.value})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="E.g. Combined Coins" />
                   </div>
                 </div>
               )}
@@ -603,13 +603,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         <label className="block text-xs text-gray-500">Qty for Part {i+1}</label>
                         <input type="number" min="1" value={splitQuantities[i]} onChange={e => {
                           const newQ = [...splitQuantities]; newQ[i] = Number(e.target.value); setSplitQuantities(newQ);
-                        }} className="w-full border-gray-300 rounded-lg shadow-sm text-sm" />
+                        }} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm text-sm" />
                       </div>
                       <div className="flex-1">
                         <label className="block text-xs text-gray-500">Gross Wt (g) for Part {i+1}</label>
                         <input type="number" step="0.01" value={splitGrossWeights[i]} onChange={e => {
                           const newW = [...splitGrossWeights]; newW[i] = Number(e.target.value); setSplitGrossWeights(newW);
-                        }} className="w-full border-gray-300 rounded-lg shadow-sm text-sm" />
+                        }} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm text-sm" />
                       </div>
                       {splitQuantities.length > 2 && (
                          <button onClick={() => {
@@ -629,7 +629,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   <select 
                     value={formData.originalTxId || ''} 
                     onChange={e => setFormData({...formData, originalTxId: e.target.value})}
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                    className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
                   >
                      <option value="">-- Select Transaction --</option>
                      {transactions.filter(t => t.type !== 'REVERSAL').map(t => (
@@ -644,24 +644,24 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 <>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                    <input type="number" value={formData.quantity || ''} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                    <input type="number" value={formData.quantity || ''} onChange={e => setFormData({...formData, quantity: Number(e.target.value)})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {isAcquisition ? 'Gross Weight (g)' : 'Gross Weight to move (g)'}
                     </label>
-                    <input type="number" step="0.01" value={formData.grossWeightGrams || ''} onChange={e => setFormData({...formData, grossWeightGrams: Number(e.target.value), weightGrams: Number(e.target.value)})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                    <input type="number" step="0.01" value={formData.grossWeightGrams || ''} onChange={e => setFormData({...formData, grossWeightGrams: Number(e.target.value), weightGrams: Number(e.target.value)})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" />
                   </div>
                   {isAcquisition && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Stone Weight (g)</label>
-                      <input type="number" step="0.01" value={formData.stoneWeightGrams || ''} onChange={e => setFormData({...formData, stoneWeightGrams: Number(e.target.value)})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                      <input type="number" step="0.01" value={formData.stoneWeightGrams || ''} onChange={e => setFormData({...formData, stoneWeightGrams: Number(e.target.value)})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" />
                     </div>
                   )}
                   {isAcquisition && (
                     <div>
                        <label className="block text-sm font-medium text-gray-700 mb-1">Purity</label>
-                       <select value={formData.purity || '22K'} onChange={e => setFormData({...formData, purity: e.target.value as any})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                       <select value={formData.purity || '22K'} onChange={e => setFormData({...formData, purity: e.target.value as any})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                           {masterData ? renderMasterOptions(masterData.purities) : Object.keys(FINENESS_MAP).map(k => <option key={k} value={k}>{k}</option>)}
                        </select>
                     </div>
@@ -674,7 +674,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                  <>
                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">New Owner</label>
-                      <select value={formData.newOwner || ''} onChange={e => setFormData({...formData, newOwner: e.target.value})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                      <select value={formData.newOwner || ''} onChange={e => setFormData({...formData, newOwner: e.target.value})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                          <option value="">-- Select Owner --</option>
                          {masterData ? renderMasterOptions(masterData.owners) : <option value="Self">Self</option>}
                       </select>
@@ -685,7 +685,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                  <>
                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">New Location</label>
-                      <select value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value as any})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                      <select value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value as any})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                          <option value="">-- Select Location --</option>
                          {masterData ? renderMasterOptions(masterData.locations) : <option value="Home">Home</option>}
                       </select>
@@ -696,7 +696,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               {/* Common Details / Reason */}
               <div className="col-span-full">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Reason / Notes</label>
-                <input type="text" value={formData.reason || ''} onChange={e => setFormData({...formData, reason: e.target.value})} className="w-full border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="Why is this transaction happening?" />
+                <input type="text" value={formData.reason || ''} onChange={e => setFormData({...formData, reason: e.target.value})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="Why is this transaction happening?" />
               </div>
 
               {/* New Asset Specs for Acquisitions */}
@@ -705,25 +705,25 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   <h4 className="col-span-full text-sm font-bold text-slate-700">New Asset Specifications</h4>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Asset Category</label>
-                    <select value={assetData.jewelleryCategory || ''} onChange={e => setAssetData({...assetData, jewelleryCategory: e.target.value as any})} className="w-full border-gray-300 rounded-lg shadow-sm text-sm">
+                    <select value={assetData.jewelleryCategory || ''} onChange={e => setAssetData({...assetData, jewelleryCategory: e.target.value as any})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm text-sm">
                       {masterData ? renderMasterOptions(masterData.categories) : <option value="Necklace">Necklace</option>}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Owner</label>
-                    <select value={assetData.owner || ''} onChange={e => setAssetData({...assetData, owner: e.target.value as any})} className="w-full border-gray-300 rounded-lg shadow-sm text-sm">
+                    <select value={assetData.owner || ''} onChange={e => setAssetData({...assetData, owner: e.target.value as any})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm text-sm">
                       {masterData ? renderMasterOptions(masterData.owners) : <option value="Self">Self</option>}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                    <select value={assetData.location || ''} onChange={e => setAssetData({...assetData, location: e.target.value as any})} className="w-full border-gray-300 rounded-lg shadow-sm text-sm">
+                    <select value={assetData.location || ''} onChange={e => setAssetData({...assetData, location: e.target.value as any})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm text-sm">
                       {masterData ? renderMasterOptions(masterData.locations) : <option value="Home Safe">Home Safe</option>}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Total Value/Cost</label>
-                    <input type="number" value={formData.amount || ''} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="w-full border-gray-300 rounded-lg shadow-sm text-sm" placeholder="₹" />
+                    <input type="number" value={formData.amount || ''} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="w-full text-slate-900 bg-white border-gray-300 rounded-lg shadow-sm text-sm" placeholder="₹" />
                   </div>
                 </div>
               )}
