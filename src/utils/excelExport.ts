@@ -13,7 +13,7 @@ import { getMasterName } from './masterData';
  * Prevents CSV/Excel Formula Injection by prepending a single quote to strings 
  * that start with =, +, -, or @. Leaves true numeric values and other types untouched.
  */
-const sanitizeExcelString = (val: any): any => {
+export const sanitizeExcelString = (val: any): any => {
   if (typeof val === 'string') {
     const trimmed = val.trim();
     if (trimmed.startsWith('=') || trimmed.startsWith('+') || trimmed.startsWith('-') || trimmed.startsWith('@')) {

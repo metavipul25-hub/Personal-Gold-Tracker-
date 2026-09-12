@@ -5,6 +5,8 @@ import { MasterDataLists, MasterDataRecord, PurityMasterRecord } from '../../typ
 interface MasterDataSheetProps {
   masterData?: MasterDataLists;
   setMasterData?: any;
+  assets?: any[];
+  transactions?: any[];
 }
 
 const MASTER_DATA_GROUPS = [

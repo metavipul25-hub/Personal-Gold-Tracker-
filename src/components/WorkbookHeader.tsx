@@ -24,6 +24,9 @@ interface WorkbookHeaderProps {
   onResetData: () => void;
   onBackup: () => void;
   onRestore: (file: File) => void;
+  syncStatus?: string;
+  lastSync?: string | null;
+  onLogout?: () => Promise<void>;
   
   
 }
